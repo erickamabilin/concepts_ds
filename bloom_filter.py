@@ -1,10 +1,21 @@
+import hashlib
+
+def hash_functions(item, num_hashes, size):
+    result = []
+    for i in range(num_hashes):
+        hash_obj = hashlib.sha256()  # cryptographic hash functions SHA-256 
+        hash_obj.update(item.encode('utf-8') + str(i).encode('utf-8'))
+        result.append(int(hash_obj.hexdigest(), 16) % size)
+    return result
+
+
 class BloomFilter:
     def __init__(self, size):
         self.size = size
         self.bit_array = [0] * size
 
     def add(self, item):
-        index = hash(item) % self.size
+        index = hash_functions(item) % self.size
         self.bit_array[index] = 1
 
     def check(self, item):
