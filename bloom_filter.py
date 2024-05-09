@@ -8,25 +8,26 @@ def hash_functions(item, num_hashes, size):
         result.append(int(hash_obj.hexdigest(), 16) % size)
     return result
 
-
 class BloomFilter:
-    def __init__(self, size):
+    def __init__(self, size, num_hashes):
         self.size = size
+        self.num_hashes = num_hashes
         self.bit_array = [0] * size
 
     def add(self, item):
-        index = hash_functions(item) % self.size
-        self.bit_array[index] = 1
+        indices = hash_functions(item, self.num_hashes, self.size)
+        for index in indices:
+            	self.bit_array[index] = 1
 
     def check(self, item):
-        index = hash(item) % self.size
-        return self.bit_array[index] == 1
+        indices = hash_functions(item, self.num_hashes, self.size)
+        return all(self.bit_array[index] for index in indices)
     # Add check for false positive rate against size
     # Add check false positive rate if size was exceeded
     # Add check for compression rate (false positive rate vs expected false positive rate)
 
 # Example 
-bloom = BloomFilter(10)  # just for demostration
+bloom = BloomFilter(100, 4)  # just for demostration
 
 bloom.add("apple")
 bloom.add("banana")
@@ -36,7 +37,7 @@ print("banana", bloom.check("banana"))  # Should be True
 print("cherry", bloom.check("cherry"))  # Should be False
 
 # Example 2 - Testing Different Data Type
-bloom = BloomFilter(10)
+bloom = BloomFilter(1000, 4)
 
 bloom.add("TTAATTA")
 bloom.add("ATTACTC")
