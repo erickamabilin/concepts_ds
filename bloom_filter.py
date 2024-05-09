@@ -1,3 +1,4 @@
+## bloom_filter.py      # The main module with the Bloom filter implementation
 import hashlib
 
 def hash_functions(item, num_hashes, size):
@@ -26,15 +27,21 @@ class BloomFilter:
     # Add check false positive rate if size was exceeded
     # Add check for compression rate (false positive rate vs expected false positive rate)
 
+def test_false_positives(bloom_filter, items, test_items):
+    for item in items:
+        bloom_filter.add(item)
+           
+    false_positives = sum(1 for item in test_items if bloom_filter.check(item))
+    print(f"False positive rate: {false_positives / len(test_items):.2%}")
+
 # Example 
-bloom = BloomFilter(100, 4)  # just for demostration
+bloom = BloomFilter(1000, 4)  # just for demostration
 
-bloom.add("apple")
-bloom.add("banana")
+existing_items = ["apple", "banana", "orange"]
+test_items = ["grape", "mango", "lemon"] + existing_items
 
-# Check for existing and non-existing items
-print("banana", bloom.check("banana"))  # Should be True
-print("cherry", bloom.check("cherry"))  # Should be False
+test_false_positives(bloom, existing_items, test_items)
+
 
 # Example 2 - Testing Different Data Type
 bloom = BloomFilter(1000, 4)
