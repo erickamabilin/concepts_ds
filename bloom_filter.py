@@ -18,6 +18,5 @@ bloom.add("apple")
 bloom.add("banana")
 
 # Check for existing and non-existing items
-print("apple", bloom.check("apple"))  # Should be True
 print("banana", bloom.check("banana"))  # Should be True
 print("cherry", bloom.check("cherry"))  # Should be False
