@@ -1,14 +1,6 @@
 # The main module with the Bloom filter implementation
 import hashlib
 
-def hash_functions(item, num_hashes, size):
-    result = []
-    for i in range(num_hashes):
-        hash_obj = hashlib.sha256()  # cryptographic hash functions SHA-256 
-        hash_obj.update(item.encode('utf-8') + str(i).encode('utf-8'))
-        result.append(int(hash_obj.hexdigest(), 16) % size)
-    return result
-
 class BloomFilter:
     def __init__(self, size, num_hashes):
         self.size = size
@@ -17,11 +9,19 @@ class BloomFilter:
         self.counter = 0
 
     def add(self, item):
-        indices = hash_functions(item, self.num_hashes, self.size)
+        indices = self.hash_functions(item)
         for index in indices:
             	self.bit_array[index] = 1
         self.counter += 1
 
     def check(self, item):
-        indices = hash_functions(item, self.num_hashes, self.size)
+        indices = self.hash_functions(item)
         return all(self.bit_array[index] for index in indices)
+    
+    def hash_functions(self, item):
+        result = []
+        for i in range(self.num_hashes):
+            hash_obj = hashlib.sha256()  # cryptographic hash functions SHA-256 
+            hash_obj.update(item.encode('utf-8') + str(i).encode('utf-8'))
+            result.append(int(hash_obj.hexdigest(), 16) % self.size)
+        return result
