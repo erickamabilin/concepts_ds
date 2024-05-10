@@ -14,11 +14,13 @@ class BloomFilter:
         self.size = size
         self.num_hashes = num_hashes
         self.bit_array = [0] * size
+        self.counter = 0
 
     def add(self, item):
         indices = hash_functions(item, self.num_hashes, self.size)
         for index in indices:
             	self.bit_array[index] = 1
+        self.counter += 1
 
     def check(self, item):
         indices = hash_functions(item, self.num_hashes, self.size)
