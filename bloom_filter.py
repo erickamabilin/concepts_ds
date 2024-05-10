@@ -1,27 +1,31 @@
 # The main module with the Bloom filter implementation
-import hashlib
+import math
+import mmh3
 
 class BloomFilter:
-    def __init__(self, size, num_hashes):
+    def __init__(self, size, error_rate):
         self.size = size
-        self.num_hashes = num_hashes
-        self.bit_array = [0] * size
+        self.error_rate = error_rate
+        self.bit_array_size = self.calculate_bit_array_size(size, error_rate)
+        self.bit_array = [0] * self.bit_array_size
+        self.num_hashes = self.calculate_num_hashes(size, self.bit_array_size)
         self.counter = 0
 
     def add(self, item):
-        indices = self.hash_functions(item)
-        for index in indices:
-            	self.bit_array[index] = 1
+        for i in range(self.num_hashes):
+            hash_val = mmh3.hash(item, i) % self.bit_array_size
+            self.bit_array[hash_val] = 1
         self.counter += 1
 
     def check(self, item):
-        indices = self.hash_functions(item)
-        return all(self.bit_array[index] for index in indices)
-    
-    def hash_functions(self, item):
-        result = []
         for i in range(self.num_hashes):
-            hash_obj = hashlib.sha256()  # cryptographic hash functions SHA-256 
-            hash_obj.update(item.encode('utf-8') + str(i).encode('utf-8'))
-            result.append(int(hash_obj.hexdigest(), 16) % self.size)
-        return result
+            hash_val = mmh3.hash(item, i) % self.bit_array_size
+            if self.bit_array[hash_val] == 0:
+                return False
+        return True
+
+    def calculate_bit_array_size(self, size, error_rate):
+        return int(- (size * math.log(error_rate)) / (math.log(2) ** 2))
+
+    def calculate_num_hashes(self, size, bit_array_size):
+        return int((bit_array_size / size) * math.log(2))

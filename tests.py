@@ -19,9 +19,10 @@ def test_false_positives(bloom_filter, items, test_items):
     print(f"False positive rate: {false_positives/len(test_items):.2%}")
     print(f"False positives over capacity: {false_positives/bloom_filter.size:.2%}")
     if bloom_filter.counter > bloom_filter.size:
-        print(f"False positive over actual size: {false_positives/bloom_filter.counter:.2%}")
-    else: print(f"False positive if capacity is reached: Not yet reached")
-    print(f"Compression rate: {(false_positives/len(test_items))/0.1:.2%}") #Expected positive rate: 1%?
+    if bloom_filter.counter > bloom_filter.size:
+        print(f"False positive over actual size beyond capacity: {false_positives/bloom_filter.counter:.2%}")
+    else: print(f"False positive over actual size beyond capacity: Capacity not yet reached")
+    print(f"Compression rate: {(false_positives/bloom_filter.counter)/bloom_filter.error_rate:.2%}") 
 
 # Example 
 bloom = BloomFilter(1000, 4)  # just for demostration
@@ -51,7 +52,7 @@ def dna(length, sequences):
 
 test_dna = dna(10,100)
 
-bloom = BloomFilter(100, 3)
+bloom = BloomFilter(1000, 0.1)
 
 add_items = test_dna[1:50]
 test_items = test_dna[51:100]
@@ -69,7 +70,7 @@ def words(sequences):
     return list(unique_seqs)
 
 test_word = words(100)
-bloom = BloomFilter(100, 3)
+bloom = BloomFilter(1000, 0.1)
 
 add_items = test_word[1:50]
 test_items = test_word[51:100]
