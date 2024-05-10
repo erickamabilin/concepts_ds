@@ -51,9 +51,27 @@ def dna(length, sequences):
 
 test_dna = dna(10,100)
 
-bloom = BloomFilter(100, 5)
+bloom = BloomFilter(100, 3)
 
 add_items = test_dna[1:50]
 test_items = test_dna[51:100]
+
+test_false_positives(bloom, add_items, test_items)
+
+#Test Random Words - slow in producing words will find list
+from random_word import RandomWords
+
+def words(sequences):
+    unique_seqs = set()
+    while len(unique_seqs) < sequences:
+        r = RandomWords()
+        unique_seqs.add(r.get_random_word())
+    return list(unique_seqs)
+
+test_word = words(100)
+bloom = BloomFilter(100, 3)
+
+add_items = test_word[1:50]
+test_items = test_word[51:100]
 
 test_false_positives(bloom, add_items, test_items)
