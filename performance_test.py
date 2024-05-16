@@ -2,7 +2,6 @@
 import random
 import time
 import matplotlib.pyplot as plt
-
 from bloom_filter import BloomFilter
 
 def dna_seq(length):
@@ -19,90 +18,52 @@ def dna(length, sequences):
         unique_seqs.add(dna_seq(length))
     return list(unique_seqs)
 
-performance_dna = dna(10,100000)
+def performance_test (bloom_capacity, error_rate, samples, operation):
+    nr_runs = 10
+    times = {}
 
-sizes = [100, 500, 1_000, 5_000, 10_000, 20_000, 30_000, 40_000, 50_000]
-
-samples = [
-    random.sample(performance_dna, k=size) for size in sizes
-]
-
-# Check bloom.add max capacity of BloomFilter 50000
-nr_runs = 10
-times = {}
-insert_sample = random.sample(performance_dna, k=20)
-for sample in samples:
-    bloom = BloomFilter(50000,0.1)
-    for dna in sample:
-        bloom.add(dna)
-    times[len(sample)] = 0.0
-    for _ in range(nr_runs):
-        start_time = time.time_ns()
-        for dna in insert_sample:
+    for sample in samples:
+        bloom = BloomFilter(bloom_capacity, error_rate)
+        for dna in sample:
             bloom.add(dna)
-        end_time = time.time_ns()
-        times[len(sample)] += end_time - start_time
-    times[len(sample)] /= nr_runs*1_000_000.0
-print(times)
 
-plt.plot(times.keys(), times.values())
+        sample_size = len(sample)
+        if sample_size < 20:
+            insert_sample = sample  
+        else:
+            insert_sample = random.sample(sample, k=20)
 
-# Check bloom.check max capacity of BloomFilter 50000
-nr_runs = 10
-times = {}
-insert_sample = random.sample(performance_dna, k=20)
-for sample in samples:
-    bloom = BloomFilter(50000,3)
-    for dna in sample:
-        bloom.add(dna)
-    times[len(sample)] = 0.0
-    for _ in range(nr_runs):
-        start_time = time.time_ns()
-        for dna in insert_sample:
-            bloom.check(dna)
-        end_time = time.time_ns()
-        times[len(sample)] += end_time - start_time
-    times[len(sample)] /= nr_runs*1_000_000.0
-print(times)
+        times[sample_size] = 0.0
+        for _ in range(nr_runs):
+            start_time = time.time_ns()
+            for dna in insert_sample:
+                if operation == 'add':
+                    bloom.add(dna)
+                elif operation == 'check':
+                    bloom.check(dna)
+            end_time = time.time_ns()
+            times[sample_size] += end_time - start_time
+        times[sample_size] /= nr_runs*1_000_000.0
+    
+    return times
 
-plt.plot(times.keys(), times.values())
+def plot_times (times, title, filename):
+    plt.plot(times.keys(), times.values())
+    plt.xlabel('Number of Elements')
+    plt.ylabel('Time (ms)')
+    plt.title(title)
+    plt.savefig(filename)
+    plt.show()
 
-# Check bloom.add max capacity of BloomFilter 10000 (run of > 10000 will be beyond capacity)
-nr_runs = 10
-times = {}
-insert_sample = random.sample(performance_dna, k=20)
-for sample in samples:
-    bloom = BloomFilter(50000,0.1)
-    for dna in sample:
-        bloom.add(dna)
-    times[len(sample)] = 0.0
-    for _ in range(nr_runs):
-        start_time = time.time_ns()
-        for dna in insert_sample:
-            bloom.add(dna)
-        end_time = time.time_ns()
-        times[len(sample)] += end_time - start_time
-    times[len(sample)] /= nr_runs*1_000_000.0
-print(times)
+if __name__ == "__main__":
+    performance_dna = dna(10, 100000)
+    sizes = [100, 500, 1000, 5000, 10000, 20000, 30000, 40000, 50000]
+    samples = [random.sample(performance_dna, k=size) for size in sizes]
 
-plt.plot(times.keys(), times.values())
+    times = performance_test(50000, 0.1, samples, 'add')
+    print(times)
+    plot_times(times, 'Bloom Filter Add Operation (Capacity 50000, Error Rate 0.1)', 'add_operation_50000_0.1.png')
 
-# Check bloom.check max capacity of BloomFilter 50000 (run of > 10000 will be beyond capacity)
-nr_runs = 10
-times = {}
-insert_sample = random.sample(performance_dna, k=20)
-for sample in samples:
-    bloom = BloomFilter(50000,3)
-    for dna in sample:
-        bloom.add(dna)
-    times[len(sample)] = 0.0
-    for _ in range(nr_runs):
-        start_time = time.time_ns()
-        for dna in insert_sample:
-            bloom.check(dna)
-        end_time = time.time_ns()
-        times[len(sample)] += end_time - start_time
-    times[len(sample)] /= nr_runs*1_000_000.0
-print(times)
-
-plt.plot(times.keys(), times.values())
+    times = performance_test(50000, 3, samples, 'check')
+    print(times)
+    plot_times(times, 'Bloom Filter Check Operation (Capacity 50000, Error Rate 3)', 'check_operation_50000_3.png')
