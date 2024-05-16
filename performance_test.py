@@ -47,6 +47,31 @@ def performance_test (bloom_capacity, error_rate, samples, operation):
     
     return times
 
+
+def false_positive_rate_test(bloom_capacity, error_rate, samples):
+    false_positives = {}
+    for sample in samples:
+        bloom = BloomFilter(bloom_capacity, error_rate)
+        for dna in sample:
+            bloom.add(dna)
+
+        sample_size = len(sample)
+        test_sample = random.sample(performance_dna, k=sample_size)
+        false_positive_count = sum(1 for item in test_sample if bloom.check(item) and item not in sample)
+        false_positive_rate = false_positive_count / sample_size
+        false_positives[sample_size] = false_positive_rate * 100  # in percentage
+    
+    return false_positives
+
+
+def plot_false_positive_rate(false_positives, title, filename):
+    plt.plot(false_positives.keys(), false_positives.values())
+    plt.xlabel('Number of Elements')
+    plt.ylabel('False Positive Rate (%)')
+    plt.title(title)
+    plt.savefig(filename)
+    plt.show()
+
 def plot_times (times, title, filename):
     plt.plot(times.keys(), times.values())
     plt.xlabel('Number of Elements')
@@ -79,3 +104,8 @@ if __name__ == "__main__":
     times = performance_test(50000, 3, samples, 'check')
     print(times)
     plot_times(times, 'Bloom Filter Check Operation (Capacity 50000, Error Rate 3) - Beyond Capacity', 'check_operation_50000_3_beyond.png')
+
+    # Test 5: False positive rate test
+    false_positives = false_positive_rate_test(50000, 0.1, samples)
+    print(false_positives)
+    plot_false_positive_rate(false_positives, 'Bloom Filter False Positive Rate (Capacity 50000, Error Rate 0.1)', 'false_positive_rate_50000_0.1.png')
