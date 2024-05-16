@@ -60,10 +60,22 @@ if __name__ == "__main__":
     sizes = [100, 500, 1000, 5000, 10000, 20000, 30000, 40000, 50000]
     samples = [random.sample(performance_dna, k=size) for size in sizes]
 
+    # Test 1: Add operation with Bloom filter capacity of 50000 and error rate of 0.1
     times = performance_test(50000, 0.1, samples, 'add')
     print(times)
     plot_times(times, 'Bloom Filter Add Operation (Capacity 50000, Error Rate 0.1)', 'add_operation_50000_0.1.png')
 
+     # Test 2: Check operation with Bloom filter capacity of 50000 and error rate of 3
     times = performance_test(50000, 3, samples, 'check')
     print(times)
     plot_times(times, 'Bloom Filter Check Operation (Capacity 50000, Error Rate 3)', 'check_operation_50000_3.png')
+
+    # Test 3: Add operation with Bloom filter capacity of 10000 (beyond capacity test)
+    times = performance_test(10000, 0.1, samples, 'add')
+    print(times)
+    plot_times(times, 'Bloom Filter Add Operation (Capacity 10000, Error Rate 0.1)', 'add_operation_10000_0.1.png')
+
+    # Test 4: Check operation with Bloom filter capacity of 50000 (beyond capacity test)
+    times = performance_test(50000, 3, samples, 'check')
+    print(times)
+    plot_times(times, 'Bloom Filter Check Operation (Capacity 50000, Error Rate 3) - Beyond Capacity', 'check_operation_50000_3_beyond.png')
