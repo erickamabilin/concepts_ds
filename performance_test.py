@@ -44,7 +44,7 @@ def performance_test (bloom_capacity, error_rate, samples, operation):
             end_time = time.time_ns()
             times[sample_size] += end_time - start_time
         times[sample_size] /= nr_runs*1_000_000.0
-    
+
     return times
 
 
@@ -65,6 +65,7 @@ def false_positive_rate_test(bloom_capacity, error_rate, samples):
 
 
 def plot_false_positive_rate(false_positives, title, filename):
+    plt.clf()
     plt.plot(false_positives.keys(), false_positives.values())
     plt.xlabel('Number of Elements')
     plt.ylabel('False Positive Rate (%)')
@@ -73,6 +74,7 @@ def plot_false_positive_rate(false_positives, title, filename):
     plt.show()
 
 def plot_times (times, title, filename):
+    plt.clf()
     plt.plot(times.keys(), times.values())
     plt.xlabel('Number of Elements')
     plt.ylabel('Time (ms)')
