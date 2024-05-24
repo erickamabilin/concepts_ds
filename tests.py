@@ -54,9 +54,9 @@ class TestBloomFilter(unittest.TestCase):
             return list(unique_seqs)
 
         random.seed(42)
-        test_dna = dna(10, 100)
-        add_items = test_dna[1:50] 
-        test_items = test_dna[50:] # test_dna[51:100]
+        test_dna = dna(10, 1000)
+        add_items = test_dna[1:500] 
+        test_items = test_dna[501:] # test_dna[501:1000]
 
         print("DNA Sequences False Positives Test")
         test_false_positives(bloom, add_items, test_items)
@@ -66,17 +66,21 @@ class TestBloomFilter(unittest.TestCase):
     def test_random_words_false_positives(self):
         bloom = BloomFilter(1000, 0.01)
 
-        def generate_random_words(sequences):
+        def load_english_words(file_path):
+            with open(file_path, 'r') as file:
+                return [line.strip() for line in file]
+
+        def generate_random_words(sequences, word_list):
             unique_seqs = set()
             while len(unique_seqs) < sequences:
-                r = RandomWords()
-                unique_seqs.add(r.get_random_word())
+                unique_seqs.add(random.choice(word_list))
             return list(unique_seqs)
 
         random.seed(42)
-        test_words = generate_random_words(100)
-        add_items = test_words[:50] #[1:50]
-        test_items = test_words[50:] #[51:100]
+        english_words = load_english_words('words.txt')
+        test_words = generate_random_words(1000,english_words)
+        add_items = test_words[:500] #[1:50]
+        test_items = test_words[501:] #[501:1000]
 
         print("Random Words False Positives Test")
         test_false_positives(bloom, add_items, test_items)
