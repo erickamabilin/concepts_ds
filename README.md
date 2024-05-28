@@ -1,7 +1,24 @@
 # Bloom Filter Implementation and Analysis
 
-## Introduction
-This project demonstrates the implementation and analysis of a Bloom filter. A Bloom filter is a space-efficient probabilistic data structure used for testing with a possibility of false positives.
+## Project Description
+This project implements a Bloom filter, a probabilistic data structure for efficient membership testing with a trade-off of false positives. The project includes performance analysis using different datasets, specifically DNA sequences and English words.
+
+
+## Installation Instructions
+1. Clone the repository from GitHub.
+2. Python 3.10 installed.
+3. Install the required Python packages
+
+## Usage Instructions
+1. To run the performance tests on DNA sequences:
+    ```bash
+    python performance_test.py
+    ```
+2. To run the performance tests on English words:
+    ```bash
+    python performance_test_words.py
+    ```
+
 
 ## Files
 - `bloom_filter.py`: Contains the implementation of the Bloom filter.
@@ -13,13 +30,9 @@ This project demonstrates the implementation and analysis of a Bloom filter. A B
 - `job_script_words.slurm`: SLURM job script for running `performance_test_words.py` on HPC.
 - `words.txt`: A text file containing a list of English words for benchmarking.
 
-## Requirements
-- Python 3.10
-- `mmh3` library
-- `matplotlib` library
+## Contributors
+- Andrea Maza León (2365080)
+- Ericka Mae Mabilin ()
 
-## Installation
-1. Clone the repository.
-2. Install the required libraries using pip:
-   ```sh
-   pip install mmh3 matplotlib
+## Conclusion
+The Bloom filter provides an efficient means of membership testing, with performance and false positive rates analyzed using both DNA sequences and English words. The performance tests highlight the efficiency and trade-offs of using Bloom filters in different scenarios.
