@@ -45,7 +45,7 @@ To run the performance tests on the HPC, use the provided SLURM job scripts.
 
 ## Contributors
 - Andrea Maza León (2365080)
-- Ericka Mae Mabilin ()
+- Ericka Mae Mabilin (2261307)
 
 ## Conclusion
 The Bloom filter provides an efficient means of membership testing, with performance and false positive rates analyzed using both DNA sequences and English words. The implementation follows an object-oriented approach, ensuring modularity and readability.
