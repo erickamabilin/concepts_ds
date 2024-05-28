@@ -3,6 +3,9 @@
 ## Project Description
 This project implements a Bloom filter, a probabilistic data structure for efficient membership testing with a trade-off of false positives. The project includes performance analysis using different datasets, specifically DNA sequences and English words.
 
+The complete report of this work, including implementation details, test results, and performance analysis, is presented in the `demo.ipynb` file. This is the most important file where our results are documented.
+
+
 
 ## Installation Instructions
 1. Clone the repository from GitHub.
@@ -10,13 +13,23 @@ This project implements a Bloom filter, a probabilistic data structure for effic
 3. Install the required Python packages
 
 ## Usage Instructions
-1. To run the performance tests on DNA sequences:
+
+### Bloom Filter Implementation and Testing
+1. To test the the Bloom filter, run:
     ```bash
-    python performance_test.py
+    python test.py
     ```
-2. To run the performance tests on English words:
+
+### Performance Analysis (HPC)
+To run the performance tests on the HPC, use the provided SLURM job scripts.
+
+1. For performance tests on DNA sequences:
     ```bash
-    python performance_test_words.py
+    sbatch job_script.slurm
+    ```
+2. For performance tests on English words:
+    ```bash
+    sbatch job_script_words.slurm
     ```
 
 
