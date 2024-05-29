@@ -172,3 +172,18 @@ if __name__ == "__main__":
     print(compression_rate)
     plot_compression_rate(compression_rate, 'Bloom Filter Compression Rate (Capacity 100000, Error Rate 0.5)', 'compression_rate_100000_0.5_word.png')
 
+    # Test 14: False positive rate test
+    false_positives = false_positive_rate_test(100000, 0.3, samples)
+    print(false_positives)
+    plot_false_positive_rate(false_positives, 'Bloom Filter False Positive Rate (Capacity 100000, Error Rate 0.3)', 'false_positive_rate_100000_0.3_word.png')
+    
+    # Test 15: False positive rate test - Beyond Capacity
+    false_positives = false_positive_rate_test(50000, 0.3, samples)
+    print(false_positives)
+    plot_false_positive_rate(false_positives, 'Bloom Filter False Positive Rate (Capacity 50000, Error Rate 0.3)', 'false_positive_rate_beyond_50000_0.3_word.png')
+
+    # Test 16: False positive rate test - Compression Rate
+    compression_rate = compression_rate_test(100000, 0.3, samples)
+    print(compression_rate)
+    plot_compression_rate(compression_rate, 'Bloom Filter Compression Rate (Capacity 100000, Error Rate 0.3)', 'compression_rate_100000_0.3_word.png')
+
