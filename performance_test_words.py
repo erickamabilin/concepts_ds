@@ -59,6 +59,20 @@ def false_positive_rate_test(bloom_capacity, error_rate, samples):
     
     return false_positives
 
+def compression_rate_test(bloom_capacity, error_rate, samples):
+    compression_rate = {}
+    for sample in samples:
+        bloom = BloomFilter(bloom_capacity, error_rate)
+        for word in sample:
+            bloom.add(word)
+
+        sample_size = len(sample)
+        test_sample = random.sample(performance_word, k=sample_size)
+        false_positive_count = sum(1 for item in test_sample if bloom.check(item) and item not in sample)
+        false_positive_rate = false_positive_count / sample_size
+        compression_rate = false_positive_rate / error_rate
+    
+    return compression_rate
 
 def plot_false_positive_rate(false_positives, title, filename):
     plt.clf()
@@ -74,6 +88,15 @@ def plot_times (times, title, filename):
     plt.plot(times.keys(), times.values())
     plt.xlabel('Number of Elements')
     plt.ylabel('Time (ms)')
+    plt.title(title)
+    plt.savefig(filename)
+    plt.show()
+
+def plot_compression_rate(compression_rate, title, filename):
+    plt.clf()
+    plt.plot(compression_rate.keys() , compression_rate.values())
+    plt.xlabel('Number of Elements')
+    plt.ylabel('Compression Rate (%)')
     plt.title(title)
     plt.savefig(filename)
     plt.show()
@@ -102,9 +125,50 @@ if __name__ == "__main__":
     # Test 4: Check operation with Bloom filter capacity of 50000 (beyond capacity test)
     times = performance_test(50000, 3, samples, 'check')
     print(times)
-    plot_times(times, 'Bloom Filter Check Operation (Capacity 50000, Error Rate 3) - Beyond Capacity', 'check_operation_50000_3_beyond_word.png')
+    plot_times(times, 'Bloom Filter Check Operation (Capacity 50000, Error Rate 3) - Beyond Capacity', 'check_operation_50000_3_beyond_word.png')`
 
     # Test 5: False positive rate test
     false_positives = false_positive_rate_test(100000, 0.1, samples)
     print(false_positives)
     plot_false_positive_rate(false_positives, 'Bloom Filter False Positive Rate (Capacity 100000, Error Rate 0.1)', 'false_positive_rate_100000_0.1_word.png')
+
+    # Test 6: False positive rate test - Beyond Capacity
+    false_positives = false_positive_rate_test(50000, 0.1, samples)
+    print(false_positives)
+    plot_false_positive_rate(false_positives, 'Bloom Filter False Positive Rate (Capacity 50000, Error Rate 0.1)', 'false_positive_rate_beyond_50000_0.1_word.png')
+
+    # Test 7: False positive rate test - Compression Rate
+    compression_rate = compression_rate_test(50000, 0.1, samples)
+    print(compression_rate)
+    plot_compression_rate(compression_rate, 'Bloom Filter Compression Rate (Capacity 50000, Error Rate 0.1)', 'compression_rate_100000_0.1_word.png')
+
+    # Test 8: False positive rate test
+    false_positives = false_positive_rate_test(100000, 3, samples)
+    print(false_positives)
+    plot_false_positive_rate(false_positives, 'Bloom Filter False Positive Rate (Capacity 100000, Error Rate 3)', 'false_positive_rate_100000_3_word.png')
+    
+    # Test 9: False positive rate test - Beyond Capacity
+    false_positives = false_positive_rate_test(50000, 3, samples)
+    print(false_positives)
+    plot_false_positive_rate(false_positives, 'Bloom Filter False Positive Rate (Capacity 50000, Error Rate 3)', 'false_positive_rate_beyond_50000_3_word.png')
+
+    # Test 10: False positive rate test - Compression Rate
+    compression_rate = compression_rate_test(100000, 3, samples)
+    print(compression_rate)
+    plot_compression_rate(compression_rate, 'Bloom Filter Compression Rate (Capacity 100000, Error Rate 3)', 'compression_rate_100000_3_word.png')
+
+    # Test 11: False positive rate test
+    false_positives = false_positive_rate_test(100000, 0.5, samples)
+    print(false_positives)
+    plot_false_positive_rate(false_positives, 'Bloom Filter False Positive Rate (Capacity 100000, Error Rate 0.5)', 'false_positive_rate_100000_0.5_word.png')
+    
+    # Test 12: False positive rate test - Beyond Capacity
+    false_positives = false_positive_rate_test(50000, 0.5, samples)
+    print(false_positives)
+    plot_false_positive_rate(false_positives, 'Bloom Filter False Positive Rate (Capacity 50000, Error Rate 0.5)', 'false_positive_rate_beyond_50000_0.5_word.png')
+
+    # Test 13: False positive rate test - Compression Rate
+    compression_rate = compression_rate_test(100000, 0.5, samples)
+    print(compression_rate)
+    plot_compression_rate(compression_rate, 'Bloom Filter Compression Rate (Capacity 100000, Error Rate 0.5)', 'compression_rate_100000_0.5_word.png')
+
