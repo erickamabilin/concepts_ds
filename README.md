@@ -35,12 +35,11 @@ To run the performance tests on the HPC, use the provided SLURM job scripts.
 
 ## Files
 - `bloom_filter.py`: Contains the implementation of the Bloom filter.
-- `test.py`: Contains unit tests for the Bloom filter.
-- `performance_test.py`: Script for performance benchmarking using DNA sequences.
+- `tests.py`: Contains unit tests for the Bloom filter.
+- `performance_test_dna.py`: Script for performance benchmarking using DNA sequences.
 - `performance_test_words.py`: Script for performance benchmarking using English words.
 - `demo.ipynb`: Jupyter notebook demonstrating the Bloom filter implementation and analysis.
-- `job_script.slurm`: SLURM job script for running `performance_test.py` on HPC.
-- `job_script_words.slurm`: SLURM job script for running `performance_test_words.py` on HPC.
+- `jobscript.slurm`: SLURM job script for running `performance_test_dna.py` and `performance_test_words.py` on HPC.
 - `words.txt`: A text file containing a list of English words for benchmarking.
 
 ## Contributors
