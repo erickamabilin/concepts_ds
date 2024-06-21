@@ -23,13 +23,9 @@ The complete report of this work, including implementation details, test results
 ### Performance Analysis (HPC)
 To run the performance tests on the HPC, use the provided SLURM job scripts.
 
-1. For performance tests on DNA sequences:
+1. For performance tests on DNA sequences and English words:
     ```bash
-    sbatch job_script.slurm
-    ```
-2. For performance tests on English words:
-    ```bash
-    sbatch job_script_words.slurm
+    sbatch jobscript.slurm
     ```
 
 
