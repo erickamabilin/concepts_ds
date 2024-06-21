@@ -10,7 +10,10 @@ The complete report of this work, including implementation details, test results
 ## Installation Instructions
 1. Clone the repository from GitHub.
 2. Python 3.10 installed.
-3. Install the required Python packages
+3. Install the required Python packages:
+    ```bash
+    pip install mmh3 matplotlib
+    ```
 
 ## Usage Instructions
 

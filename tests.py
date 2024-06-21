@@ -1,7 +1,6 @@
 import unittest
 import random
 from bloom_filter import BloomFilter
-from random_word import RandomWords
 
 
 def test_false_positives(bloom_filter, items, test_items):
